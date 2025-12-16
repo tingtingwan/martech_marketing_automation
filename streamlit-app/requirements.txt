@@ -1,0 +1,7 @@
+streamlit==1.38.0
+pandas==2.2.2
+databricks-sdk>=0.20.0
+openai
+streamlit-antd-components>=0.3.2
+Pillow>=10.0.0
+databricks-sql-connector>=3.0.0

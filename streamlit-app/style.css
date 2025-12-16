@@ -1,0 +1,564 @@
+/* Flo Campaign Workflow - Custom Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   GLOBAL STYLES
+   ============================================================ */
+
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(135deg, #fef5f7 0%, #fff 50%, #f8f9ff 100%);
+}
+
+/* Hide Streamlit branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+
+:root {
+    --flo-primary: #F15A6B;
+    --flo-primary-dark: #D94857;
+    --flo-secondary: #FF9A9E;
+    --flo-surface: #FFFFFF;
+    --flo-surface-2: #FFF7F9;
+    --flo-surface-3: #F8F9FF;
+    --flo-text: #1A1A2E;
+    --flo-text-secondary: #6B7280;
+    --flo-border: #F3E5EA;
+    --flo-success: #10B981;
+    --flo-warning: #F59E0B;
+    --flo-error: #EF4444;
+    --flo-shadow-sm: 0 2px 8px rgba(241, 90, 107, 0.08);
+    --flo-shadow-md: 0 4px 16px rgba(241, 90, 107, 0.12);
+    --flo-shadow-lg: 0 8px 24px rgba(241, 90, 107, 0.16);
+    --flo-radius: 16px;
+    --flo-radius-sm: 12px;
+    --flo-radius-lg: 20px;
+}
+
+/* ============================================================
+   WORKFLOW STEPPER
+   ============================================================ */
+
+.workflow-stepper-container {
+    background: var(--flo-surface);
+    border-radius: var(--flo-radius);
+    padding: 32px;
+    margin: 32px 0;
+    box-shadow: var(--flo-shadow-md);
+    border: 1px solid var(--flo-border);
+}
+
+.workflow-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    position: relative;
+}
+
+.workflow-step-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.workflow-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #F3F4F6;
+    color: #9CA3AF;
+    font-size: 24px;
+    font-weight: 600;
+    box-shadow: 0 0 0 4px #F9FAFB;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+}
+
+.workflow-step.active {
+    background: linear-gradient(135deg, #F15A6B 0%, #FF9A9E 100%);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px #FFF, 0 8px 24px rgba(241,90,107,0.3);
+}
+
+.workflow-step.complete {
+    background: var(--flo-success);
+    color: #fff;
+    box-shadow: 0 0 0 4px #FFF, 0 4px 16px rgba(16,185,129,0.2);
+}
+
+.workflow-connector {
+    flex: 1;
+    height: 4px;
+    background: #E5E7EB;
+    position: relative;
+    margin: 0 -28px;
+    z-index: 1;
+}
+
+.workflow-connector .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #F15A6B 0%, #FF9A9E 100%);
+    animation: fillLine 0.6s ease forwards;
+}
+
+.workflow-connector.complete .progress {
+    background: var(--flo-success);
+    width: 100%;
+}
+
+@keyframes fillLine {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+.workflow-labels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.workflow-label {
+    color: var(--flo-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.workflow-label.active {
+    color: var(--flo-primary);
+    font-weight: 600;
+}
+
+.workflow-label.complete {
+    color: var(--flo-success);
+    font-weight: 600;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.card {
+    background: var(--flo-surface);
+    border: 1px solid var(--flo-border);
+    border-radius: var(--flo-radius);
+    padding: 24px;
+    box-shadow: var(--flo-shadow-sm);
+    margin: 16px 0;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--flo-shadow-md);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--flo-text);
+    margin: 0;
+}
+
+.card-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--flo-surface-2);
+    color: var(--flo-primary);
+    border: 1px solid var(--flo-border);
+}
+
+/* ============================================================
+   BRIEF SUMMARY
+   ============================================================ */
+
+.brief-summary {
+    background: linear-gradient(135deg, rgba(241, 90, 107, 0.05) 0%, rgba(255, 154, 158, 0.05) 100%);
+    border: 2px solid var(--flo-border);
+    border-radius: var(--flo-radius-lg);
+    padding: 28px;
+    margin: 24px 0;
+    box-shadow: var(--flo-shadow-md);
+}
+
+.brief-summary h3 {
+    margin-top: 0;
+    color: var(--flo-text);
+}
+
+.brief-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.brief-item {
+    background: var(--flo-surface);
+    padding: 16px;
+    border-radius: var(--flo-radius-sm);
+    border: 1px solid var(--flo-border);
+}
+
+.brief-item-label {
+    font-size: 12px;
+    color: var(--flo-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.brief-item-value {
+    font-size: 16px;
+    color: var(--flo-text);
+    font-weight: 600;
+}
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.kpi-card {
+    background: var(--flo-surface);
+    border: 1px solid var(--flo-border);
+    border-radius: var(--flo-radius-sm);
+    padding: 20px;
+    box-shadow: var(--flo-shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--flo-shadow-md);
+}
+
+.kpi-label {
+    color: var(--flo-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.kpi-value {
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--flo-text);
+    margin: 4px 0;
+}
+
+.kpi-change {
+    font-size: 13px;
+    color: var(--flo-success);
+    font-weight: 600;
+}
+
+/* ============================================================
+   ALERT CARDS
+   ============================================================ */
+
+.alert {
+    border-radius: var(--flo-radius-sm);
+    padding: 20px;
+    margin: 16px 0;
+    border-left: 4px solid;
+    display: flex;
+    align-items: start;
+    gap: 16px;
+}
+
+.alert-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.alert-message {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.alert-info {
+    background: #EFF6FF;
+    border-color: #3B82F6;
+    color: #1E40AF;
+}
+
+.alert-success {
+    background: #ECFDF5;
+    border-color: var(--flo-success);
+    color: #065F46;
+}
+
+.alert-warning {
+    background: #FEF3C7;
+    border-color: var(--flo-warning);
+    color: #92400E;
+}
+
+.alert-error {
+    background: #FEE2E2;
+    border-color: var(--flo-error);
+    color: #991B1B;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.stButton > button {
+    border-radius: var(--flo-radius-sm);
+    font-weight: 600;
+    padding: 12px 24px;
+    border: none;
+    transition: all 0.2s ease;
+    font-size: 15px;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--flo-shadow-md);
+}
+
+.approval-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-approve {
+    background: var(--flo-success) !important;
+    color: white !important;
+}
+
+.btn-reject {
+    background: var(--flo-error) !important;
+    color: white !important;
+}
+
+/* ============================================================
+   IMAGES
+   ============================================================ */
+
+.image-container {
+    border-radius: var(--flo-radius);
+    overflow: hidden;
+    border: 2px solid var(--flo-border);
+    box-shadow: var(--flo-shadow-md);
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    transform: scale(1.02);
+    box-shadow: var(--flo-shadow-lg);
+}
+
+/* ============================================================
+   SKELETON LOADER
+   ============================================================ */
+
+.skeleton {
+    width: 100%;
+    height: 320px;
+    border-radius: var(--flo-radius);
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border: 2px solid var(--flo-border);
+}
+
+@keyframes shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+/* ============================================================
+   EXPERT PROMPT
+   ============================================================ */
+
+.expert-prompt {
+    background: var(--flo-surface-3);
+    border: 2px dashed var(--flo-border);
+    border-radius: var(--flo-radius-sm);
+    padding: 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--flo-text-secondary);
+    max-height: none;
+    overflow: visible;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    background: var(--flo-surface);
+    padding: 8px;
+    border-radius: var(--flo-radius-sm);
+    border: 1px solid var(--flo-border);
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #F15A6B 0%, #FF9A9E 100%);
+    color: white !important;
+}
+
+/* ============================================================
+   EXPANDER
+   ============================================================ */
+
+.streamlit-expanderHeader {
+    background: var(--flo-surface);
+    border-radius: var(--flo-radius-sm);
+    border: 1px solid var(--flo-border);
+    font-weight: 600;
+    color: var(--flo-text);
+}
+
+/* ============================================================
+   METRICS
+   ============================================================ */
+
+[data-testid="stMetricValue"] {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--flo-text-secondary);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+
+.stProgress > div > div {
+    background: linear-gradient(90deg, #F15A6B 0%, #FF9A9E 100%);
+    border-radius: 999px;
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+hr {
+    margin: 32px 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--flo-border) 50%, transparent 100%);
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+
+.section-header {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--flo-text);
+    margin: 32px 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(135deg, #F15A6B 0%, #FF9A9E 100%);
+    border-radius: 999px;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .brief-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .workflow-labels {
+        font-size: 11px;
+    }
+    
+    .workflow-step {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brief-grid,
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
