@@ -110,6 +110,7 @@ class DatabricksDataSource:
 
     host: str
     token: str
+    warehouse_id: str = ""  # SQL Warehouse ID (a.k.a. DBSQL Warehouse)
     http_path: str = ""
     catalog: str = ""
     schema: str = ""
