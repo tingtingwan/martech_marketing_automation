@@ -1,11 +1,5 @@
 import os
 import sys
-
-# Ensure local module imports (utils, config, datasource) work when run as a script
-APP_BASE_DIR = os.path.dirname(__file__)
-if APP_BASE_DIR and APP_BASE_DIR not in sys.path:
-    sys.path.insert(0, APP_BASE_DIR)
-
 import html
 import time
 from datetime import datetime
@@ -28,9 +22,13 @@ from utils import (
 from config import get_data_source
 
 
+APP_BASE_DIR = os.path.dirname(__file__)
 DATA_PROVIDER = os.environ.get("DATA_PROVIDER", "placeholder")
 _provider = get_data_source()
 
+if APP_BASE_DIR and APP_BASE_DIR not in sys.path:
+    # Ensure local module imports (utils, config, datasource) work when run as a script
+    sys.path.insert(0, APP_BASE_DIR)
 
 def _load_icon():
     try:
@@ -96,6 +94,7 @@ if "campaign_brief" not in st.session_state:
 # ===================== Helpers =====================
 def normalize_brief(brief: dict) -> dict:
     return _normalize_brief(brief, DEFAULT_BRIEF)
+
 
 
 def render_header():
@@ -190,11 +189,12 @@ def main():
 
     # ---------- Intro Section: choose campaign or show empty state ----------
     if not st.session_state.get("workflow_started", False):
-        if not campaigns:
-            st.info("No campaigns available. Configure DATA_PROVIDER=databricks and implement queries, or create campaigns in your source system.")
-            if st.button("🚀 Start Campaign Creation", use_container_width=True, disabled=True):
-                pass
-            return
+        if DATA_PROVIDER == "placeholder":
+            st.info(
+                "Using the Placeholder data provider to preview the UI. "
+                "No images, Unity Catalog data, or live metrics are included. "
+                "Switch DATA_PROVIDER=databricks and implement queries to enable real data."
+            )
 
         def _format_campaign_top(item: Dict[str, Any]) -> str:
             key = str(item.get("brief_id") or "unknown")

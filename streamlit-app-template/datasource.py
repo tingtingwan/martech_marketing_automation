@@ -48,7 +48,42 @@ class PlaceholderDataSource:
     """
 
     def list_campaigns(self) -> List[Dict[str, Any]]:
-        return []
+        # Minimal metadata to allow clients to navigate the UI without real data.
+        # These entries do NOT include images or UC-backed fields.
+        return [
+            {
+                "brief_id": "brief_001",
+                "brief_title": "Women's Health Awareness - Q1 Acquisition",
+                "campaign_name": "Women's Health Awareness - Q1 Acquisition",
+                "type": "Acquisition",
+                "lifecycle_stage": "cycle_tracking",
+                "medical_constraints": [
+                    "No unsupported medical claims",
+                    "Cite research for any health benefits",
+                ],
+                "legal_requirements": [
+                    "HIPAA compliant",
+                    "FDA disclosure required",
+                    "Privacy policy link visible",
+                ],
+            },
+            {
+                "brief_id": "brief_002",
+                "brief_title": "Menopause Support - Retention Campaign",
+                "campaign_name": "Menopause Support - Retention Campaign",
+                "type": "Retention",
+                "lifecycle_stage": "menopause",
+                "medical_constraints": [
+                    "No hormone therapy promotion",
+                    "Avoid medical diagnosis claims",
+                ],
+                "legal_requirements": [
+                    "Medical disclaimer visible",
+                    "Privacy policy link",
+                    "Safe data handling",
+                ],
+            },
+        ]
 
     def get_compliance(self, brief_id: str) -> Optional[Dict[str, Any]]:
         return None
