@@ -17,6 +17,9 @@ __pycache__/
 ### Temporary working dirs
 .tmp-*/
 
+### Databricks local metadata (do not commit)
+.databricks/
+
 ### Streamlit
 # Keep configs if you decide to track them; don't ignore whole folder by default.
 # .streamlit/
