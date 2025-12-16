@@ -436,6 +436,11 @@ def main():
     # ----- HANDOFF -----
     with tabs[3]:
         st.subheader("🚀 Handoff & Go-Live")
+        if isinstance(_provider, PlaceholderDataSource):
+            st.info(
+                "Preview mode: Handoff data requires Unity Catalog tables/views. "
+                "Create the relevant datasets and implement the Databricks data source to enable live handoff readiness."
+            )
         if not st.session_state.workflow_state.get("compliance_approved", False):
             st.warning("⚠️ Please get Compliance approval first before handoff.")
         else:
