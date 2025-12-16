@@ -20,10 +20,10 @@ from utils import (
     get_analysis_output,
 )
 from config import get_data_source
+from datasource import PlaceholderDataSource
 
 
 APP_BASE_DIR = os.path.dirname(__file__)
-DATA_PROVIDER = os.environ.get("DATA_PROVIDER", "placeholder")
 _provider = get_data_source()
 
 if APP_BASE_DIR and APP_BASE_DIR not in sys.path:
@@ -189,12 +189,8 @@ def main():
 
     # ---------- Intro Section: choose campaign or show empty state ----------
     if not st.session_state.get("workflow_started", False):
-        if DATA_PROVIDER == "placeholder":
-            st.info(
-                "Using the Placeholder data provider to preview the UI. "
-                "No images, Unity Catalog data, or live metrics are included. "
-                "Switch DATA_PROVIDER=databricks and implement queries to enable real data."
-            )
+        if isinstance(_provider, PlaceholderDataSource):
+            st.info("Preview mode: no UC data or images. Configure Databricks access to enable live data.")
 
         def _format_campaign_top(item: Dict[str, Any]) -> str:
             key = str(item.get("brief_id") or "unknown")

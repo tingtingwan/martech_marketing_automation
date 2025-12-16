@@ -1,26 +1,22 @@
 import os
-from typing import Literal
-
-from .datasource import DataSource, PlaceholderDataSource, DatabricksDataSource
-
-ProviderName = Literal["placeholder", "databricks"]
-
-
-def get_provider_name() -> ProviderName:
-    name = (os.environ.get("DATA_PROVIDER", "placeholder") or "").strip().lower()
-    return "databricks" if name == "databricks" else "placeholder"
+from datasource import DataSource, PlaceholderDataSource, DatabricksDataSource
 
 
 def get_data_source() -> DataSource:
-    provider = get_provider_name()
-    if provider == "databricks":
-        # Skeleton; raises NotImplementedError on query calls
+    """
+    Select a data source without requiring a DATA_PROVIDER toggle.
+    - If Databricks environment variables are present, return DatabricksDataSource.
+    - Otherwise, return PlaceholderDataSource (empty, safe defaults).
+    """
+    host = os.environ.get("DATABRICKS_HOST", "") or ""
+    token = os.environ.get("DATABRICKS_TOKEN", "") or ""
+    if host and token:
         return DatabricksDataSource(
-            host=os.environ.get("DATABRICKS_HOST", ""),
-            token=os.environ.get("DATABRICKS_TOKEN", ""),
-            http_path=os.environ.get("DATABRICKS_HTTP_PATH", ""),
-            catalog=os.environ.get("DATABRICKS_CATALOG", ""),
-            schema=os.environ.get("DATABRICKS_SCHEMA", ""),
+            host=host,
+            token=token,
+            http_path=os.environ.get("DATABRICKS_HTTP_PATH", "") or "",
+            catalog=os.environ.get("DATABRICKS_CATALOG", "") or "",
+            schema=os.environ.get("DATABRICKS_SCHEMA", "") or "",
         )
     return PlaceholderDataSource()
 
