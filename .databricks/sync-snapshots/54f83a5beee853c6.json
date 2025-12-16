@@ -1,0 +1,50 @@
+{
+  "version": "v1",
+  "host": "https://e2-demo-west.cloud.databricks.com",
+  "remote_path": "/Workspace/Users/tingting.wan@databricks.com/flo-martech-demo",
+  "last_modified_times": {
+    ".DS_Store": "2025-12-04T09:12:13.394519641Z",
+    ".gitignore": "2025-12-05T15:44:05.602223758Z",
+    "00_data_prep.py": "2025-12-02T17:17:44.970479503Z",
+    "00a_data_generative_creatives.py": "2025-12-02T17:17:45.491718765Z",
+    "01_agent_workflow_uc_functions.py": "2025-12-02T17:17:45.888710219Z",
+    "01a_agent_bricks_ka.py": "2025-12-02T17:17:46.415188353Z",
+    "requirements.txt": "2025-12-03T21:07:28.355475199Z",
+    "streamlit-app/app.py": "2025-12-05T15:41:52.574842936Z",
+    "streamlit-app/app.yaml": "2025-12-03T22:40:54.450022869Z",
+    "streamlit-app/images/flo_community_image.png": "2025-12-05T09:49:34.452574594Z",
+    "streamlit-app/images/flo_gen_ad_image.png": "2025-12-05T09:49:47.524867846Z",
+    "streamlit-app/images/flo_gen_ad_image_1.png": "2025-12-05T10:02:11.68007015Z",
+    "streamlit-app/requirements.txt": "2025-12-03T22:40:54.450151743Z"
+  },
+  "local_to_remote_names": {
+    ".DS_Store": ".DS_Store",
+    ".gitignore": ".gitignore",
+    "00_data_prep.py": "00_data_prep",
+    "00a_data_generative_creatives.py": "00a_data_generative_creatives",
+    "01_agent_workflow_uc_functions.py": "01_agent_workflow_uc_functions",
+    "01a_agent_bricks_ka.py": "01a_agent_bricks_ka",
+    "requirements.txt": "requirements.txt",
+    "streamlit-app/app.py": "streamlit-app/app.py",
+    "streamlit-app/app.yaml": "streamlit-app/app.yaml",
+    "streamlit-app/images/flo_community_image.png": "streamlit-app/images/flo_community_image.png",
+    "streamlit-app/images/flo_gen_ad_image.png": "streamlit-app/images/flo_gen_ad_image.png",
+    "streamlit-app/images/flo_gen_ad_image_1.png": "streamlit-app/images/flo_gen_ad_image_1.png",
+    "streamlit-app/requirements.txt": "streamlit-app/requirements.txt"
+  },
+  "remote_to_local_names": {
+    ".DS_Store": ".DS_Store",
+    ".gitignore": ".gitignore",
+    "00_data_prep": "00_data_prep.py",
+    "00a_data_generative_creatives": "00a_data_generative_creatives.py",
+    "01_agent_workflow_uc_functions": "01_agent_workflow_uc_functions.py",
+    "01a_agent_bricks_ka": "01a_agent_bricks_ka.py",
+    "requirements.txt": "requirements.txt",
+    "streamlit-app/app.py": "streamlit-app/app.py",
+    "streamlit-app/app.yaml": "streamlit-app/app.yaml",
+    "streamlit-app/images/flo_community_image.png": "streamlit-app/images/flo_community_image.png",
+    "streamlit-app/images/flo_gen_ad_image.png": "streamlit-app/images/flo_gen_ad_image.png",
+    "streamlit-app/images/flo_gen_ad_image_1.png": "streamlit-app/images/flo_gen_ad_image_1.png",
+    "streamlit-app/requirements.txt": "streamlit-app/requirements.txt"
+  }
+}

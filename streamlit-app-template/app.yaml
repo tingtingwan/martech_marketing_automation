@@ -1,12 +1,13 @@
-bundle:
-  name: martech_streamlit_app_template
-resources:
-  apps:
-    streamlit-template:
-      name: "Streamlit Template - Databricks App"
-      type: streamlit
-      path: "streamlit-app-template"
-      file_path: "streamlit-app-template/app.py"
-      enable_tracking: false
+command: [
+  "streamlit",
+  "run",
+  "app.py"
+]
 
-
+env:
+  - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+    value: "false"
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: "sql-warehouse"
+  - name: DATABRICKS_DASHBOARD_URL
+    value: "https://e2-demo-west.cloud.databricks.com/embed/dashboardsv3/01f0d5ef491c1f48baa6c4cc57275786?o=2556758628403379"
