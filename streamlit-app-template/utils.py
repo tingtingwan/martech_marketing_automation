@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Dict, Optional
 import time
 
-from .config import get_data_source
+from config import get_data_source
 
 _provider = get_data_source()
 
