@@ -81,6 +81,25 @@ streamlit run streamlit-app-template/app.py
 - Networking:
   - Allow only required outbound domains (package repos, APIs) per workspace policy.
 
+### Deployment checklist (Databricks Apps)
+- [ ] Code is in a Git repo and connected via Databricks Repos
+- [ ] App created in Workspace Apps pointing to `streamlit-app-template/app.py`
+- [ ] Environment variables set:
+  - [ ] `DATA_PROVIDER=placeholder` (or `databricks` after you implement queries)
+  - [ ] `DATABRICKS_HOST`, `DATABRICKS_TOKEN` (if using service principal), `DATABRICKS_HTTP_PATH` (optional)
+  - [ ] `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` (Unity Catalog context)
+  - [ ] `DATABRICKS_DASHBOARD_URL` (embed URL; keep secrets out)
+- [ ] Compute selected with access to Unity Catalog objects (SQL Warehouse or cluster)
+- [ ] App permissions follow least-privilege (grant `CAN USE` to intended users/groups)
+- [ ] Secrets stored in App environment variables or secret scopes (not in code)
+- [ ] Logs visible in App run output (no local file logging)
+- [ ] Outbound access restricted to needed domains only
+- [ ] Smoke test: App loads, basic navigation works, no import errors
+
+References
+- Databricks App Templates (examples): [databricks/app-templates](https://github.com/databricks/app-templates)
+- Databricks Apps best practices: [docs.databricks.com – Apps best practices](https://docs.databricks.com/en/dev-tools/databricks-apps/best-practices.html)
+
 ### What to implement (when connecting to data)
 - In `datasource.py` (DatabricksDataSource):
   - `list_campaigns`: rows with `brief_id`, `brief_title`, `campaign_name`, `type`, optional lifecycle/legal/medical notes
