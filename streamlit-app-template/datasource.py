@@ -103,9 +103,10 @@ class PlaceholderDataSource:
 @dataclass
 class DatabricksDataSource:
     """
-    Skeleton to connect to Databricks. All query methods intentionally
-    raise NotImplementedError. Implement with your preferred client
-    (databricks-sql-connector, DBSQL via JDBC/ODBC, or REST APIs).
+    Skeleton to connect to Databricks. Query methods are provided as no-op
+    stubs that return empty-but-valid structures so the app flow does not break.
+    Implement with your preferred client (databricks-sdk SQL Statements API,
+    databricks-sql-connector, or JDBC/ODBC) using the Warehouse ID.
     """
 
     host: str
@@ -115,40 +116,53 @@ class DatabricksDataSource:
     catalog: str = ""
     schema: str = ""
 
-    # Example: lazy connection handle (not initialized here)
+    # Example: lazy connection handle (not initialized by default)
     _conn: Any = None
 
     def _ensure_conn(self) -> None:
         """
-        Establish and cache a connection. Not implemented by default.
+        Establish and cache a connection to a SQL Warehouse.
+        This is a placeholder; replace with actual connection code.
         """
-        raise NotImplementedError(
-            "Implement Databricks connection setup in DatabricksDataSource._ensure_conn"
-        )
+        # Example using databricks-sdk (Statements API):
+        # from databricks.sdk import WorkspaceClient
+        # self._conn = WorkspaceClient(host=self.host, token=self.token)
+        # Or using databricks-sql-connector:
+        # from databricks import sql
+        # self._conn = sql.connect(server_hostname=..., http_path=self.http_path, access_token=self.token)
+        return
+
+    def _execute_sql(self, query: str, params: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+        """
+        Execute SQL against the configured Warehouse. Returns list of dict rows.
+        This is a non-breaking stub; update with real execution code.
+        """
+        # Ensure connection (no-op until implemented)
+        self._ensure_conn()
+        # TODO: Implement SQL execution using your preferred client.
+        # For now, return empty results and let the UI show empty state messages.
+        return []
 
     def list_campaigns(self) -> List[Dict[str, Any]]:
-        raise NotImplementedError(
-            "Implement SELECT to fetch campaigns (brief_id, names, metadata) from Unity Catalog."
-        )
+        # Example query (replace catalog.schema.table with your UC table/view)
+        # rows = self._execute_sql(\"\"\"\n# SELECT brief_id, brief_title, campaign_name, type, lifecycle_stage,\n#        medical_constraints, legal_requirements\n# FROM catalog.schema.campaigns\n# ORDER BY brief_id\n# \"\"\")\n# return rows
+        return []
 
     def get_compliance(self, brief_id: str) -> Optional[Dict[str, Any]]:
-        raise NotImplementedError(
-            "Implement a query to fetch compliance by brief_id from Unity Catalog."
-        )
+        # Example query placeholder:
+        # rows = self._execute_sql(\"\"\"\n# SELECT * FROM catalog.schema.compliance WHERE brief_id = :brief_id LIMIT 1\n# \"\"\", {\"brief_id\": brief_id})\n# return rows[0] if rows else None
+        return {}
 
     def get_generated_image_b64(self, brief_id: str) -> Optional[str]:
-        raise NotImplementedError(
-            "Implement a query or object store fetch to retrieve generated image b64 for brief_id."
-        )
+        # Example: fetch from a UC table or object store and return base64 string
+        return None
 
     def get_handoff_output(self, params: Dict[str, Any]) -> Dict[str, Any]:
-        raise NotImplementedError(
-            "Implement a query to fetch handoff output by brief_id or related keys."
-        )
+        # Example query placeholder:
+        # rows = self._execute_sql(\"\"\"\n# SELECT * FROM catalog.schema.handoff WHERE brief_id = :brief_id LIMIT 1\n# \"\"\", {\"brief_id\": params.get(\"brief_id\")})\n+        # if rows:\n+        #     return {\"output\": rows[0]}\n+        return {\"output\": {}}
 
     def get_analysis_output(self, params: Dict[str, Any]) -> Dict[str, Any]:
-        raise NotImplementedError(
-            "Implement a query to fetch analysis outputs / metrics for the campaign."
-        )
+        # Example query placeholder:
+        # rows = self._execute_sql(\"\"\"\n# SELECT * FROM catalog.schema.analysis WHERE brief_id = :brief_id ORDER BY ts DESC LIMIT 100\n# \"\"\", {\"brief_id\": params.get(\"brief_id\")})\n+        return {\"output\": {}}
 
 
