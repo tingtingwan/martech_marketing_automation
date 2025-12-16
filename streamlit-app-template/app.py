@@ -10,7 +10,7 @@ from PIL import Image  # type: ignore
 from io import BytesIO
 import base64
 
-from .util import (
+from .utils import (
     normalize_brief as _normalize_brief,
     get_handoff_output,
     get_compliance_from_uc_timeout,
