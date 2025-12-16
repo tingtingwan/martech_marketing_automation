@@ -42,6 +42,8 @@ Notes:
   ```bash
   export DATABRICKS_HOST=https://<your-workspace-url>
   export DATABRICKS_TOKEN=<your-token>
+  # Recommended: set your SQL Warehouse ID early as part of setup
+  export DATABRICKS_WAREHOUSE_ID=<your-sql-warehouse-id>   # or SQL_WAREHOUSE_ID
   export DATABRICKS_HTTP_PATH=<optional-sql-warehouse-http-path>
   export DATABRICKS_CATALOG=<your-catalog>
   export DATABRICKS_SCHEMA=<your-schema>
@@ -53,6 +55,7 @@ Notes:
 3. Navigate to `streamlit-app-template/app.py` and open it as a Streamlit App.
 4. In the App settings, add environment variables:
    - `DATABRICKS_HOST`, `DATABRICKS_TOKEN`
+   - `DATABRICKS_WAREHOUSE_ID` (or `SQL_WAREHOUSE_ID`) — required for UC queries via SQL Warehouses
    - `DATABRICKS_HTTP_PATH` (optional; for SQL Warehouses)
    - `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` (Unity Catalog context)
    - `DATABRICKS_DASHBOARD_URL` (optional: embed URL for the Analysis tab)
@@ -80,7 +83,8 @@ Notes:
 - [ ] Code is in a Git repo and connected via Databricks Repos
 - [ ] App created in Workspace Apps pointing to `streamlit-app-template/app.py`
 - [ ] Environment variables set:
-  - [ ] `DATABRICKS_HOST`, `DATABRICKS_TOKEN` (service principal or PAT), `DATABRICKS_HTTP_PATH` (optional)
+  - [ ] `DATABRICKS_HOST`, `DATABRICKS_TOKEN` (service principal or PAT)
+  - [ ] `DATABRICKS_WAREHOUSE_ID` (or `SQL_WAREHOUSE_ID`) and `DATABRICKS_HTTP_PATH` (if using SQL Warehouses)
   - [ ] `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` (Unity Catalog context)
   - [ ] `DATABRICKS_DASHBOARD_URL` (embed URL; keep secrets out)
 - [ ] Compute selected with access to Unity Catalog objects (SQL Warehouse or cluster)
