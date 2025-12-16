@@ -1,4 +1,11 @@
 import os
+import sys
+
+# Ensure local module imports (utils, config, datasource) work when run as a script
+APP_BASE_DIR = os.path.dirname(__file__)
+if APP_BASE_DIR and APP_BASE_DIR not in sys.path:
+    sys.path.insert(0, APP_BASE_DIR)
+
 import html
 import time
 from datetime import datetime
@@ -10,7 +17,7 @@ from PIL import Image  # type: ignore
 from io import BytesIO
 import base64
 
-from .utils import (
+from utils import (
     normalize_brief as _normalize_brief,
     get_handoff_output,
     get_compliance_from_uc_timeout,
@@ -18,10 +25,9 @@ from .utils import (
     generate_approval_checklist_from_compliance,
     get_analysis_output,
 )
-from .config import get_data_source
+from config import get_data_source
 
 
-APP_BASE_DIR = os.path.dirname(__file__)
 DATA_PROVIDER = os.environ.get("DATA_PROVIDER", "placeholder")
 _provider = get_data_source()
 
