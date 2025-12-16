@@ -1,0 +1,12 @@
+bundle:
+  name: martech_streamlit_app_template
+resources:
+  apps:
+    streamlit-template:
+      name: "Streamlit Template - Databricks App"
+      type: streamlit
+      path: "streamlit-app-template"
+      file_path: "streamlit-app-template/app.py"
+      enable_tracking: false
+
+
