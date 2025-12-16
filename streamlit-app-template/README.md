@@ -1,6 +1,6 @@
 ## Databricks Streamlit App Template
 
-Build a Streamlit app on Databricks for a marketing workflow (brief → creative → compliance → launch → analysis) without any fake data. This template keeps the exact UI and styling from the reference app, but leaves all data connections for you to wire up to your own sources.
+Build a Streamlit app on Databricks for a marketing workflow (brief → creative → compliance → launch → analysis). This template keeps the exact UI and styling from the reference app, but leaves all data connections for you to wire up to your own sources.
 
 ### What this gives your team
 - A ready-to-run UI for your campaign workflow
@@ -64,8 +64,8 @@ streamlit run streamlit-app-template/app.py
 5. Attach to a cluster or SQL Warehouse that can read your Unity Catalog data.
 
 ### Databricks Apps best practices (specific)
-- Bind to the platform port and address:
-  - We pass `--server.port ${DATABRICKS_APP_PORT} --server.address 0.0.0.0` in `app.yaml`.
+- Ports and binding:
+  - Databricks Apps provides the port via `DATABRICKS_APP_PORT`. Streamlit typically binds correctly without extra flags. If needed, you can add `--server.port ${DATABRICKS_APP_PORT} --server.address 0.0.0.0` in `app.yaml`.
 - Keep startup fast:
   - Avoid heavy installs or blocking init; pin Python deps in `requirements.txt`.
 - Log to stdout/stderr:
