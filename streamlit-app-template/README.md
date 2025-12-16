@@ -54,7 +54,7 @@ export DATA_PROVIDER=placeholder
 streamlit run streamlit-app-template/app.py
 ```
 
-### Deploy on Databricks (simple path)
+### Deploy on Databricks (Apps)
 1. Put this folder in a Git repo.
 2. In Databricks, open Repos and connect to your repo.
 3. Navigate to `streamlit-app-template/app.py` and open it as a Streamlit App.
@@ -62,6 +62,24 @@ streamlit run streamlit-app-template/app.py
    - Start with: `DATA_PROVIDER=placeholder`
    - Later, add the Databricks variables above and change to `DATA_PROVIDER=databricks`
 5. Attach to a cluster or SQL Warehouse that can read your Unity Catalog data.
+
+### Databricks Apps best practices (specific)
+- Bind to the platform port and address:
+  - We pass `--server.port ${DATABRICKS_APP_PORT} --server.address 0.0.0.0` in `app.yaml`.
+- Keep startup fast:
+  - Avoid heavy installs or blocking init; pin Python deps in `requirements.txt`.
+- Log to stdout/stderr:
+  - Streamlit logs go to stdout; avoid writing local log files.
+- Use governed data access:
+  - Query via SQL Warehouses/Unity Catalog; do not embed credentials in code.
+- Configure with environment variables:
+  - Use App settings for `DATA_PROVIDER`, Unity Catalog settings, and dashboard URL.
+- Principle of least privilege:
+  - Prefer `CAN USE` over `CAN MANAGE`; use service principals for uniform access.
+- Secrets management:
+  - Store tokens/secrets in App environment variables or secret scopes; never in code.
+- Networking:
+  - Allow only required outbound domains (package repos, APIs) per workspace policy.
 
 ### What to implement (when connecting to data)
 - In `datasource.py` (DatabricksDataSource):

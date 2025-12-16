@@ -10,4 +10,4 @@ env:
   - name: DATABRICKS_WAREHOUSE_ID
     valueFrom: "sql-warehouse"
   - name: DATABRICKS_DASHBOARD_URL
-    value: "https://<your-workspace>/embed/dashboardsv3/<dashboard-id>?o=<workspace-id>"
+    value: "https://e2-demo-west.cloud.databricks.com/embed/dashboardsv3/01f0d5ef491c1f48baa6c4cc57275786?o=2556758628403379"
