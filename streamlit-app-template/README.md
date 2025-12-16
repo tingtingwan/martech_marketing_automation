@@ -21,46 +21,41 @@ Build a Streamlit app on Databricks for a marketing workflow (brief → creative
 - Handoff to channel owners with launch readiness and status tracking
 - Post-launch analysis: KPIs, findings, next-iteration recommendations
 
-### How the data side works (in plain terms)
-- The app reads from a “data provider.” You can choose:
-  - Placeholder (default): shows empty-state messages; no data needed.
-  - Databricks (skeleton): you fill in how to read your tables/files.
-- You can switch providers with one environment variable.
+### How the data source works
+- Auto-detects Databricks:
+  - If `DATABRICKS_HOST` and `DATABRICKS_TOKEN` are set, the app uses the Databricks data source (you implement the queries).
+  - Otherwise, it uses a placeholder data source with minimal metadata so the UI can be previewed without real data.
+- Implement the Databricks queries in `streamlit-app-template/datasource.py` (`DatabricksDataSource` methods):
+  - `list_campaigns` (selection metadata)
+  - `get_compliance` (scores/status/issues and optional creative)
+  - `get_handoff_output` (status, channels, budgets, owners)
+  - `get_analysis_output` (KPIs, findings, next steps)
 
-#### Choose your provider
-- Start empty (recommended to validate the UI):
+### Run locally
+```bash
+pip install -r streamlit-app-template/requirements.txt
+streamlit run streamlit-app-template/app.py
+```
+Notes:
+- Without Databricks env vars, the app runs in preview mode (no images/UC-backed data).
+- To use your Databricks workspace locally:
   ```bash
-  export DATA_PROVIDER=placeholder
-  ```
-- Switch to Databricks when ready to connect data:
-  ```bash
-  export DATA_PROVIDER=databricks
   export DATABRICKS_HOST=https://<your-workspace-url>
   export DATABRICKS_TOKEN=<your-token>
   export DATABRICKS_HTTP_PATH=<optional-sql-warehouse-http-path>
   export DATABRICKS_CATALOG=<your-catalog>
   export DATABRICKS_SCHEMA=<your-schema>
   ```
-  Then complete the methods inside `streamlit-app-template/datasource.py` (DatabricksDataSource) to fetch:
-  - Campaign list (for selection)
-  - Compliance details (and generated creative, if stored)
-  - Handoff data (status, owners, budgets, timelines)
-  - Analysis outputs (KPIs, findings, next steps)
-
-### Run locally
-```bash
-pip install -r streamlit-app-template/requirements.txt
-export DATA_PROVIDER=placeholder
-streamlit run streamlit-app-template/app.py
-```
 
 ### Deploy on Databricks (Apps)
 1. Put this folder in a Git repo.
 2. In Databricks, open Repos and connect to your repo.
 3. Navigate to `streamlit-app-template/app.py` and open it as a Streamlit App.
 4. In the App settings, add environment variables:
-   - Start with: `DATA_PROVIDER=placeholder`
-   - Later, add the Databricks variables above and change to `DATA_PROVIDER=databricks`
+   - `DATABRICKS_HOST`, `DATABRICKS_TOKEN`
+   - `DATABRICKS_HTTP_PATH` (optional; for SQL Warehouses)
+   - `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` (Unity Catalog context)
+   - `DATABRICKS_DASHBOARD_URL` (optional: embed URL for the Analysis tab)
 5. Attach to a cluster or SQL Warehouse that can read your Unity Catalog data.
 
 ### Databricks Apps best practices (specific)
@@ -73,7 +68,7 @@ streamlit run streamlit-app-template/app.py
 - Use governed data access:
   - Query via SQL Warehouses/Unity Catalog; do not embed credentials in code.
 - Configure with environment variables:
-  - Use App settings for `DATA_PROVIDER`, Unity Catalog settings, and dashboard URL.
+  - Use App settings for Unity Catalog settings and the optional dashboard URL.
 - Principle of least privilege:
   - Prefer `CAN USE` over `CAN MANAGE`; use service principals for uniform access.
 - Secrets management:
@@ -85,8 +80,7 @@ streamlit run streamlit-app-template/app.py
 - [ ] Code is in a Git repo and connected via Databricks Repos
 - [ ] App created in Workspace Apps pointing to `streamlit-app-template/app.py`
 - [ ] Environment variables set:
-  - [ ] `DATA_PROVIDER=placeholder` (or `databricks` after you implement queries)
-  - [ ] `DATABRICKS_HOST`, `DATABRICKS_TOKEN` (if using service principal), `DATABRICKS_HTTP_PATH` (optional)
+  - [ ] `DATABRICKS_HOST`, `DATABRICKS_TOKEN` (service principal or PAT), `DATABRICKS_HTTP_PATH` (optional)
   - [ ] `DATABRICKS_CATALOG`, `DATABRICKS_SCHEMA` (Unity Catalog context)
   - [ ] `DATABRICKS_DASHBOARD_URL` (embed URL; keep secrets out)
 - [ ] Compute selected with access to Unity Catalog objects (SQL Warehouse or cluster)
