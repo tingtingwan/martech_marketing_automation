@@ -2,6 +2,8 @@
 
 Build a Streamlit app on Databricks for a marketing workflow (brief → creative → compliance → launch → analysis). This template keeps the exact UI and styling from the reference app, but leaves all data connections for you to wire up to your own sources.
 
+> Important: This repository is provided for demo purposes only and is not intended for production use. Security hardening, error handling, resiliency, and observability are intentionally minimal to keep the template simple. Review and adapt all code, dependencies, and infrastructure to your organization’s production standards before deploying to end users.
+
 ### What this gives your team
 - A ready-to-run UI for your campaign workflow
   - Briefing, Production, Compliance, Handoff, and Analysis tabs
@@ -105,6 +107,26 @@ References
   - `get_handoff_output`: channels, budget splits, team owners, target launch
   - `get_analysis_output`: KPIs, findings, next-iteration suggestions
 - Keep secrets out of code. Use App environment variables, Secret Scopes, or `st.secrets`.
+
+### Why no sample data?
+Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.
+
+
+### Why no sample data?
+Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.
+
+
+### Why no sample data?
+Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.
+
+
+### Why no sample data?
+Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.
+
+
+### Why no sample data?
+Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.
+
 
 ### Why no sample data?
 Pilot apps often stall when “demo numbers” don’t match reality. This template shows the exact UI your users will get, while making it obvious where data will plug in—so you can align on the screens first, then connect to the right sources.

@@ -2,7 +2,6 @@ streamlit>=1.35
 pandas>=2.0
 Pillow>=9.5
 databricks-sdk>=0.30
-# Optional if you implement SQL connectivity
-# databricks-sql-connector>=2.9
+databricks-sql-connector>=2.9
 
 

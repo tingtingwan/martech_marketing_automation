@@ -24,3 +24,21 @@ def get_data_source() -> DataSource:
     return PlaceholderDataSource()
 
 
+def get_creative_briefs_table() -> str:
+    """
+    Returns the fully-qualified table name for creative briefs.
+    Override with env var CREATIVE_BRIEFS_TABLE, defaults to main.flo_martech.creative_briefs.
+    """
+    return os.environ.get("CREATIVE_BRIEFS_TABLE", "main.flo_martech.creative_briefs")
+
+def get_generated_creatives_table() -> str:
+    """
+    Returns the fully-qualified table name for generated creatives.
+    Override with env var GENERATED_CREATIVES_TABLE, defaults to main.flo_martech.generated_creatives.
+    """
+    return os.environ.get("GENERATED_CREATIVES_TABLE", "main.flo_martech.generated_creatives")
+
+
+
+
+

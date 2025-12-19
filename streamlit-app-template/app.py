@@ -16,10 +16,11 @@ from utils import (
     get_handoff_output,
     get_compliance_from_uc_timeout,
     get_generated_image_b64_from_uc,
+    get_expert_prompt_from_uc,
     generate_approval_checklist_from_compliance,
     get_analysis_output,
 )
-from config import get_data_source
+from config import get_data_source, get_creative_briefs_table
 from datasource import PlaceholderDataSource
 
 
@@ -190,7 +191,100 @@ def main():
     # ---------- Intro Section: choose campaign or show empty state ----------
     if not st.session_state.get("workflow_started", False):
         if isinstance(_provider, PlaceholderDataSource):
-            st.info("Preview mode: no UC data or images. Configure Databricks access to enable live data.")
+            st.info("Preview mode: live data enabled when Databricks connectivity is configured.")
+
+        # Handle empty dataset gracefully
+        if not campaigns:
+            tbl = get_creative_briefs_table()
+            # Lightweight connectivity check to aid debugging
+            try:
+                from utils import get_databricks_connection  # type: ignore
+                conn = get_databricks_connection()
+                if conn:
+                    try:
+                        cur = conn.cursor()
+                        cur.execute("SELECT 1")
+                        _ = cur.fetchone()
+                        # Try previewing first 5 rows from the configured table
+                        try:
+                            preview_sql = (
+                                f"SELECT brief_id, brief_title, lifecycle_stage, campaign_type, "
+                                f"medical_constraints, legal_requirements, created_at FROM {tbl} LIMIT 5"
+                            )
+                            cur.execute(preview_sql)
+                            _rows = cur.fetchall() or []
+                            _cols = [d[0] for d in (cur.description or [])]
+                            with st.expander(f"Sample query and first rows from {tbl}", expanded=False):
+                                st.code(preview_sql, language="sql")
+                                if _rows:
+                                    import pandas as pd  # type: ignore
+                                    st.dataframe(pd.DataFrame(_rows, columns=_cols), use_container_width=True, hide_index=True)
+                                else:
+                                    st.caption("Table query returned 0 rows.")
+                            # Fallback: map preview rows into campaigns to unblock UI
+                            if _rows and _cols:
+                                preview_campaigns: List[Dict[str, Any]] = []
+                                for tup in _rows:
+                                    try:
+                                        row_dict = { _cols[i]: tup[i] for i in range(len(_cols)) }
+                                    except Exception:
+                                        row_dict = {}
+                                    if not row_dict:
+                                        continue
+                                    bid = row_dict.get("brief_id")
+                                    if bid in (None, "", "null"):
+                                        continue
+                                    title = row_dict.get("brief_title") or str(bid)
+                                    ctype = row_dict.get("campaign_type") or "Awareness"
+                                    lifecycle = row_dict.get("lifecycle_stage")
+                                    def _to_list(v):
+                                        if v is None:
+                                            return []
+                                        if isinstance(v, list):
+                                            return [str(x) for x in v]
+                                        s = str(v).strip()
+                                        if s.startswith("["):
+                                            import json as _json
+                                            try:
+                                                parsed = _json.loads(s)
+                                                if isinstance(parsed, list):
+                                                    return [str(x) for x in parsed]
+                                            except Exception:
+                                                pass
+                                        if "," in s:
+                                            return [p.strip() for p in s.split(",") if p.strip()]
+                                        return [s] if s else []
+                                    preview_campaigns.append(
+                                        {
+                                            "brief_id": str(bid),
+                                            "brief_title": str(title),
+                                            "campaign_name": str(title),
+                                            "type": str(ctype),
+                                            "lifecycle_stage": lifecycle,
+                                            "medical_constraints": _to_list(row_dict.get("medical_constraints")),
+                                            "legal_requirements": _to_list(row_dict.get("legal_requirements")),
+                                        }
+                                    )
+                                if preview_campaigns:
+                                    campaigns = preview_campaigns
+                        except Exception as e:
+                            pass
+                    except Exception as e:
+                        pass
+                    finally:
+                        try:
+                            cur.close()
+                        except Exception:
+                            pass
+                        try:
+                            conn.close()
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+            if not campaigns:
+                st.warning(f"No campaigns available. Validate data in {tbl}.")
+                return
 
         def _format_campaign_top(item: Dict[str, Any]) -> str:
             key = str(item.get("brief_id") or "unknown")
@@ -210,22 +304,27 @@ def main():
             "brief_id": chosen.get("brief_id"),
             "brief_title": chosen.get("brief_title"),
             "campaign_name": chosen.get("campaign_name"),
+            "lifecycle_stage": chosen.get("lifecycle_stage"),
+            "medical_constraints": chosen.get("medical_constraints"),
+            "legal_requirements": chosen.get("legal_requirements"),
         }
         st.session_state.campaign_brief = normalize_brief(
             {
-                "type": chosen.get("type", DEFAULT_BRIEF["type"]),
-                "audience": DEFAULT_BRIEF["audience"],
+                "type": chosen.get("type") or chosen.get("campaign_type") or DEFAULT_BRIEF["type"],
+                "audience": chosen.get("target_segment") or DEFAULT_BRIEF["audience"],
                 "budget": DEFAULT_BRIEF["budget"],
                 "timeline": DEFAULT_BRIEF["timeline"],
-                "brief": DEFAULT_BRIEF["brief"],
+                "brief": chosen.get("key_message") or DEFAULT_BRIEF["brief"],
             }
         )
 
         # Summary card (same structure)
         meta = st.session_state.get("campaign_meta", {}) or {}
-        lifecycle = chosen.get("lifecycle_stage") or "-"
-        med_cons = ", ".join(chosen.get("medical_constraints") or []) if isinstance(chosen.get("medical_constraints"), list) else str(chosen.get("medical_constraints") or "-")
-        legal_reqs = ", ".join(chosen.get("legal_requirements") or []) if isinstance(chosen.get("legal_requirements"), list) else str(chosen.get("legal_requirements") or "-")
+        lifecycle = meta.get("lifecycle_stage") or "-"
+        med_list = meta.get("medical_constraints")
+        legal_list = meta.get("legal_requirements")
+        med_cons = ", ".join(med_list) if isinstance(med_list, list) else str(med_list or "-")
+        legal_reqs = ", ".join(legal_list) if isinstance(legal_list, list) else str(legal_list or "-")
         st.markdown('<div class="card">', unsafe_allow_html=True)
         st.markdown("##### Campaign Summary")
         st.markdown(
@@ -296,8 +395,8 @@ def main():
                 f"<div class='brief-item'><div class='brief-item-label'>Campaign</div><div class='brief-item-value'>{html.escape(meta.get('campaign_name','-') or '-')}</div></div>"
                 f"<div class='brief-item'><div class='brief-item-label'>Type</div><div class='brief-item-value'>{html.escape(brief.get('type','-') or '-')}</div></div>"
                 f"<div class='brief-item'><div class='brief-item-label'>Lifecycle</div><div class='brief-item-value'>{html.escape(str(meta.get('lifecycle_stage','-')))}</div></div>"
-                f"<div class='brief-item'><div class='brief-item-label'>Medical Constraints</div><div class='brief-item-value'>{html.escape('-')}</div></div>"
-                f"<div class='brief-item'><div class='brief-item-label'>Legal Requirements</div><div class='brief-item-value'>{html.escape('-')}</div></div>"
+                f"<div class='brief-item'><div class='brief-item-label'>Medical Constraints</div><div class='brief-item-value'>{html.escape(', '.join(meta.get('medical_constraints') or []) if isinstance(meta.get('medical_constraints'), list) else str(meta.get('medical_constraints') or '-'))}</div></div>"
+                f"<div class='brief-item'><div class='brief-item-label'>Legal Requirements</div><div class='brief-item-value'>{html.escape(', '.join(meta.get('legal_requirements') or []) if isinstance(meta.get('legal_requirements'), list) else str(meta.get('legal_requirements') or '-'))}</div></div>"
                 "</div>",
                 unsafe_allow_html=True,
             )
@@ -313,7 +412,9 @@ def main():
             if not st.session_state.get("prod_prompt_generated", False):
                 if st.button("🧠 Generate Expert Prompt", key="btn_gen_prompt", use_container_width=True):
                     st.session_state["prod_prompt_generated"] = True
-                    st.session_state["prod_prompt_text"] = ""
+                    # Fetch from UC if available; fallback to empty
+                    _brief_id = (st.session_state.get("campaign_meta") or {}).get("brief_id")
+                    st.session_state["prod_prompt_text"] = get_expert_prompt_from_uc(_brief_id) if _brief_id else ""
             else:
                 st.success("Expert prompt generated")
                 _ep = st.session_state.get("prod_prompt_text") or ""
