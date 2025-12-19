@@ -1,6 +1,8 @@
 Flo Martech Apps - Overview
 ===========================
 
+> Important: This repository is provided for demo purposes only and is not intended for production use. Security hardening, error handling, resiliency, and observability are intentionally minimal to keep the template simple. Review and adapt all code, dependencies, and infrastructure to your organization’s production standards before deploying to end users.
+
 This repo contains:
 
 - streamlit-app/
@@ -15,9 +17,4 @@ This repo contains:
 - notebooks/
   - Put your dataset-generation notebooks here (e.g., to publish Unity Catalog tables for campaigns, compliance, handoff, analysis).
   - A short guide is in `notebooks/README.md`.
-
-Notes
-- No sample/synthetic data is committed. The template shows clear empty states until you connect Unity Catalog data.
-- Optional zip bundles of the template may appear in the root for sharing (e.g., `streamlit-app-template-v2.zip`).
-
 
